@@ -1,0 +1,12 @@
+{ 
+"avro_schema": "C:\\Users\\jzamacona\\PycharmProjects\\SocialMediaAnalytics\\avschema_yelp_business_search.avsc",
+"avro_output": "C:\\Users\\jzamacona\\PycharmProjects\\SocialMediaAnalytics\\yelp_search_LA_DRYWALL_",
+"api_key_yelp": "Q54SwqvDl04bc6w_z5zcq8LF5fL2OlJLZwO0Tkg1eQiOJVudZj3qL0B3RawFsUMNrOIX9KE5FVcC-uRg7roIrGv8C4HnR49bqFoQyf70U2xccoHZpKQOaWHm5uLsW3Yx",
+  "gcp_auth_method": "local",
+  "gcp_key": "C:\\GPC\\firstproject-218715-3834e5fe28b6.json",
+  "gcp_bucket_name": "firstproject-218715.appspot.com",
+  "gcp_output": "LFDS_DEV/YELP/yelp_search_LA_DRYWALL_",
+  "gcp_bq_dataset": "TestDataset",
+  "gcp_bq_table": "AVRO_LP5",
+  "gcp_bq_uri_source": "gs://firstproject-218715.appspot.com/"
+}

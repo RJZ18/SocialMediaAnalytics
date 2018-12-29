@@ -1,0 +1,12 @@
+{
+  "type": "record",
+  "namespace": "example2",
+  "name": "Fullname2",                      
+  "fields" : [
+    {"name": "snapshot_date", "type": ["null", "string"]},
+    {"name": "location_value", "type": ["null", "string"]},
+    {"name": "category_value", "type": ["null", "string"]},
+    {"name": "sort_value", "type": ["null", "string"]},
+    {"name": "records_value", "type": ["null", "int"]}
+  ]
+}
