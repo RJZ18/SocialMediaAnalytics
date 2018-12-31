@@ -5,6 +5,7 @@ from avro import schema, datafile, io
 from GCPStorage import move_file_gcp
 from GCPBigQ_IngestURI import load_bq_from_uri
 from YelpAPI_Search import call_yelp_api_business_search
+from time import sleep
 
 # Date string for output file
 snapshot_date_local = localtime()
@@ -169,6 +170,7 @@ for i in range(offset_count):
                               "phone": raw_phone
                               })
     offset = offset + 50
+    sleep(10)
 df_writer.close()
 
 # Move file to GCP Storage
