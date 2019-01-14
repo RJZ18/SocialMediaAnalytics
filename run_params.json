@@ -1,7 +1,7 @@
 {
-"location": ["60614"],
+"location": ["60614", "60657", "60618"],
 "categories":["restaurants"],
 "sort_by":["distance"],
   "attributes":["deals"],
-"records": 50
+"records": 850
 }

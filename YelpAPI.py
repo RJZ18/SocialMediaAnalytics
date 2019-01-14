@@ -5,6 +5,8 @@ from avro import schema, datafile, io
 from GCPStorage import move_file_gcp
 from GCPBigQ_IngestURI import load_bq_from_uri
 from YelpAPI_Search import call_yelp_api_business_search
+from GCPBigQ_ChicagoXREF import load_bq_chicago_xref
+from GCPBigQ_IngestLocalFile import load_bq_from_local_file
 from time import sleep
 
 # Date string for output file
@@ -28,6 +30,9 @@ with open(config_file, "r+") as fo:
     gcp_dataset = parsed_json["gcp_bq_dataset"]
     gcp_table = parsed_json["gcp_bq_table"]
     gcp_uri_source = parsed_json["gcp_bq_uri_source"]
+    chicago_xref_file = parsed_json["chicago_xref_local_file"]
+    gcp_table_chicago_xref = parsed_json["gcp_chicago_xref_table"]
+    gcp_dataset_chicago_xref = parsed_json["gcp_chicago_xref_dataset"]
 
 avro_outfile_name = avro_output + snapshotDateStringFile + '.avro'
 gcp_outfile_name = gcp_output + snapshotDateStringFile + '.avro'
@@ -178,3 +183,18 @@ move_file_gcp(gcp_bucket_name, gcp_outfile_name, avro_outfile_name, gcp_key, gcp
 
 # Load file to GCP BigQuery
 load_bq_from_uri(gcp_uri_full_name, "WRITE_TRUNCATE", gcp_dataset, gcp_table, gcp_key, gcp_auth_method)
+
+
+# CHICAGO COMMUNITY XREF
+sql_xref = """
+SELECT distinct R.ID, R.coordinates_latitude, R.coordinates_longitude, XREF.COMMUNITY, r.review_count 
+FROM `firstproject-218715.QA_Env.RAW_YELP_SEARCH` R
+LEFT JOIN `firstproject-218715.QA_Env.XREF_CHICAGO_RSTR_NEIGHBORHOOD` XREF
+ON R.ID=XREF.RESTAURANT_YELP_ID
+WHERE XREF.COMMUNITY is null
+and R. location_value=R. location_zip_code
+ORDER by r.review_count DESC
+"""
+
+load_bq_chicago_xref(sql_xref, chicago_xref_file, gcp_key, gcp_auth_method)
+load_bq_from_local_file(chicago_xref_file, "WRITE_APPEND", gcp_dataset_chicago_xref, gcp_table_chicago_xref, gcp_key, gcp_auth_method)
