@@ -12,7 +12,7 @@ def get_chi_community(lon, lat):
         community = 'UNKNOWN'
     return community
 
-print(get_chi_community(-87.714772641696,41.794855090865))
+print(get_chi_community(-87.704650303852,41.923137314789))
 
 #[-87.718238078095,41.953877541087]
 #[-87.716443878231,41.787057792673]
