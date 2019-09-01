@@ -4,13 +4,46 @@ import os.path
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
+import requests
+import csv
+from io import StringIO
+
 
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 
 # The ID and range of a sample spreadsheet.
-SAMPLE_SPREADSHEET_ID = '1pY95tTuIcBuKIKXhDeHz73HctQ2GiTHT0HoMgoqvy2w'
-SAMPLE_RANGE_NAME = 'CommUnits!A2:E'
+SPREADSHEET_ID = '1Z5flDzeF5CmraMvT0DV7pZW-K6lzkKTjoABjwUA0Bnk'
+RANGE_NAME = 'Sheet1!A2:B'
+value_input_option ='RAW'
+
+values = [
+    [
+        'Test0', 0
+    ],
+    [
+        'Test1', 1
+    ]
+]
+
+body = {
+    'values': values
+}
+
+
+def get_chi_permits():
+    url='https://data.cityofchicago.org/resource/ydr8-5enu.csv?issue_date=2019-08-07T00:00:00.000'
+    response = requests.request('GET', url)
+    response_string = response.text
+    parsed_csv = StringIO(response_string)
+    reader = csv.reader(parsed_csv, delimiter=',')
+    # json_string = response.text
+    # parsed_json = json.loads(json_string)
+
+    # return parsed_json
+    return reader
+
+
 
 def main():
     """Shows basic usage of the Sheets API.
@@ -38,18 +71,12 @@ def main():
     service = build('sheets', 'v4', credentials=creds)
 
     # Call the Sheets API
-    sheet = service.spreadsheets()
-    result = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,
-                                range=SAMPLE_RANGE_NAME).execute()
-    values = result.get('values', [])
+    result = service.spreadsheets().values().append(
+        spreadsheetId=SPREADSHEET_ID, range=RANGE_NAME,
+        valueInputOption=value_input_option, body=body).execute()
+    result.get
+    print('{0} cells updated.'.format(result.get('appendedCells')))
 
-    if not values:
-        print('No data found.')
-    else:
-        print('Name, Major:')
-        for row in values:
-            # Print columns A and E, which correspond to indices 0 and 4.
-            print('%s, %s' % (row[0], row[4]))
 
 if __name__ == '__main__':
     main()
